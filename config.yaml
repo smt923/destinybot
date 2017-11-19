@@ -1,0 +1,6 @@
+token: 'DISCORD_API_KEY'
+
+bot:
+  plugins:
+    - plugins.raid
+    - plugins.map
