@@ -26,7 +26,7 @@ class RaidPlugin(Plugin):
         """Help for all commands"""
         # todo: tidy this messy format string somehow - make it it's own disco plugin and have each
         # individual plugin generate it's own help from it's commands?
-        event.msg.reply("All commands must be sent by mentioning me:\n**Raid**\n{}\n{}\n{}\n{}\n{}\n{}\n**Map**\n{}\n{}\n{}"
+        event.msg.reply("All commands must be sent by mentioning me:\n**Raid**\n{}\n{}\n{}\n{}\n{}\n{}\n**Map**\n{}\n{}\n{}\n{}"
                         .format("`raid new <time>` - set a new raid with a given time (eg, 10pm)",
                                 "`raid edit <time>` - edit the current raid with a new time",
                                 "`raid clear` - clear the currently set raid",
@@ -35,7 +35,8 @@ class RaidPlugin(Plugin):
                                 "`raid remove` - remove yourself from the current raid",
                                 "`map underbelly` - post the map of the leviathan underbelly",
                                 "`map underbelly3d` - post the 3D map of the leviathan underbelly",
-                                "`map doggos` - post the map of the Pleasure Gardens raid room"))
+                                "`map doggos` - post the map of the Pleasure Gardens raid room",
+                                "`map voidcall1 - post a chart of the four symbols found in raids"))
 
     @Plugin.command('show', group='raid')
     def command_raid(self, event):
