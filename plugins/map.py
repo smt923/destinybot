@@ -17,3 +17,8 @@ class MapPlugin(Plugin):
     def command_dog(self, event):
         """Posts a map of the dog room"""
         event.msg.reply('https://i.imgur.com/oCEK6EK.png')
+
+    @Plugin.command('voidcall', group='map')
+    def command_voidcall(self, event):
+        """Posts a chart of the four call outs used during a raid"""
+        event.msg.reply('https://i.imgur.com/vU9j5qj.jpg')
