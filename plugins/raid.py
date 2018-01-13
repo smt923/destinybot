@@ -4,6 +4,7 @@ from disco.bot import Plugin
 import arrow
 import dateparser
 
+
 class RaidPlugin(Plugin):
     """Disco plugin holding all of the commands related to Destiny 2 raids"""
 
@@ -26,17 +27,17 @@ class RaidPlugin(Plugin):
         """Help for all commands"""
         # todo: tidy this messy format string somehow - make it it's own disco plugin and have each
         # individual plugin generate it's own help from it's commands?
-        event.msg.reply("All commands must be sent by mentioning me:\n**Raid**\n{}\n{}\n{}\n{}\n{}\n{}\n**Map**\n{}\n{}\n{}\n{}"
-                        .format("`raid new <time>` - set a new raid with a given time (eg, 10pm)",
-                                "`raid edit <time>` - edit the current raid with a new time",
-                                "`raid clear` - clear the currently set raid",
-                                "`raid show` - show the current raid, if any",
-                                "`raid add` - add yourself to the current raid",
-                                "`raid remove` - remove yourself from the current raid",
+        event.msg.reply("All commands must be sent by mentioning me:\n**Type Raid or Trials before these**\n{}\n{}\n{}\n{}\n{}\n{}\n**Map**\n{}\n{}\n{}\n{}"
+                        .format("`new <time>` - set a new raid/trial with a given time (eg, 10pm)",
+                                "`edit <time>` - edit the current raid/trial with a new time",
+                                "`clear` - clear the currently set raid/trial",
+                                "`show` - show the current raid/trial, if any",
+                                "`add` - add yourself to the current raid/trial",
+                                "`remove` - remove yourself from the current raid/trial",
                                 "`map underbelly` - post the map of the leviathan underbelly",
                                 "`map underbelly3d` - post the 3D map of the leviathan underbelly",
                                 "`map doggos` - post the map of the Pleasure Gardens raid room",
-                                "`map voidcall1 - post a chart of the four symbols found in raids"))
+                                "`map voidcall` - post a chart of the four symbols found in raids"))
 
     @Plugin.command('show', group='raid')
     def command_raid(self, event):
@@ -89,7 +90,8 @@ class RaidPlugin(Plugin):
             timer_15.start()
             self.timer15triggered = False
         self.raidtime = arrow.get(parsed)
-        event.msg.reply('Current raid time changed to: ' + parsed.strftime("%A at %I:%M %p %Z"))
+        event.msg.reply('Current raid time changed to: ' +
+                        parsed.strftime("%A at %I:%M %p %Z"))
 
     @Plugin.command('clear', group='raid')
     def command_clear(self, event):
@@ -101,16 +103,19 @@ class RaidPlugin(Plugin):
     def command_add(self, event):
         """Adds the user to the raid group"""
         if event.msg.author in self.raiders:
-            event.msg.reply('You\'re already in the raid, ' + event.msg.author.username + '!')
+            event.msg.reply('You\'re already in the raid, ' +
+                            event.msg.author.username + '!')
             return
         self.raiders.append(event.msg.author)
-        event.msg.reply('You have been added to the raid, ' + event.msg.author.username)
+        event.msg.reply('You have been added to the raid, ' +
+                        event.msg.author.username)
 
     @Plugin.command('remove', group='raid')
     def command_remove(self, event):
         """Removes the user from the raid group"""
         self.raiders.remove(event.msg.author)
-        event.msg.reply('You have been removed from the raid, ' + event.msg.author.username)
+        event.msg.reply('You have been removed from the raid, ' +
+                        event.msg.author.username)
 
     def raidtimer_now(self, event):
         """When there's 30 seconds left, mention the raidgroup and reset the raid"""
@@ -138,7 +143,8 @@ class RaidPlugin(Plugin):
                 raidgroup = ""
                 for members in self.raiders:
                     raidgroup += members.mention + ", "
-                event.msg.reply('Raid starting in 15 minutes! ' + raidgroup.rstrip(', '))
+                event.msg.reply(
+                    'Raid starting in 15 minutes! ' + raidgroup.rstrip(', '))
                 self.timer15triggered = True
                 break
             time.sleep(30)
