@@ -1,5 +1,6 @@
 from disco.bot import Plugin
 
+
 class MapPlugin(Plugin):
     """Disco plugin holding all of the commands related to Destiny 2 maps"""
 
@@ -17,6 +18,11 @@ class MapPlugin(Plugin):
     def command_dog(self, event):
         """Posts a map of the dog room"""
         event.msg.reply('https://i.imgur.com/oCEK6EK.png')
+
+    @Plugin.command('pdoggos', group='map')
+    def command_dog(self, event):
+        """Posts a map of the prestige dog room"""
+        event.msg.reply('https://i.imgur.com/GeOcRSL.png')
 
     @Plugin.command('voidcall', group='map')
     def command_voidcall(self, event):
