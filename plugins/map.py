@@ -24,6 +24,11 @@ class MapPlugin(Plugin):
         """Posts a map of the prestige dog room"""
         event.msg.reply('https://i.imgur.com/GeOcRSL.png')
 
+    @Plugin.command('pbathers', group='map')
+    def command_dog(self, event):
+        """Posts a map of the prestige bathhouse callouts"""
+        event.msg.reply('https://i.imgur.com/rh3jddo.png')
+
     @Plugin.command('voidcall', group='map')
     def command_voidcall(self, event):
         """Posts a chart of the four call outs used during a raid"""
