@@ -20,12 +20,12 @@ class MapPlugin(Plugin):
         event.msg.reply('https://i.imgur.com/oCEK6EK.png')
 
     @Plugin.command('pdoggos', group='map')
-    def command_dog(self, event):
+    def command_pdog(self, event):
         """Posts a map of the prestige dog room"""
         event.msg.reply('https://i.imgur.com/GeOcRSL.png')
 
     @Plugin.command('pbathers', group='map')
-    def command_dog(self, event):
+    def command_pbath(self, event):
         """Posts a map of the prestige bathhouse callouts"""
         event.msg.reply('https://i.imgur.com/rh3jddo.png')
 
