@@ -16,7 +16,7 @@ class HelpPlugin(Plugin):
         # todo: tidy this messy format string somehow - have each
         # plugin generate it's own help?
         event.msg.reply("All commands must be sent by mentioning me:\n**Event**\n{}\n{}\n{}\n{}\n{}\n{}\n**Map**\n{}\n{}\n{}\n{}\n{}\n{}"
-                        .format("`new <time> <Event Title> ~ <Event Description>` - set a new event with a given time (eg, 10pm). Split event title and description with a ~ character!",
+                        .format("`new <time> <Event Title> ~ <Event Description>` - set a new event with a given time (eg, 10pm). Split event title and description with a |, - or ~ character!",
                                 "`edit <time>` - edit the current event with a new time",
                                 "`clear` - clear the currently set event",
                                 "`show` - show the current event, if any",
