@@ -1,4 +1,4 @@
-from disco.bot import Plugin
+﻿from disco.bot import Plugin
 
 
 class HelpPlugin(Plugin):
@@ -15,13 +15,13 @@ class HelpPlugin(Plugin):
         """Help for all commands"""
         # todo: tidy this messy format string somehow - have each
         # plugin generate it's own help?
-        event.msg.reply("All commands must be sent by mentioning me:\n**Type Raid or Trials before these**\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n**Map**\n{}\n{}\n{}\n{}"
-                        .format("`new <time>` - set a new raid/trial with a given time (eg, 10pm)",
-                                "`edit <time>` - edit the current raid/trial with a new time",
-                                "`clear` - clear the currently set raid/trial",
-                                "`show` - show the current raid/trial, if any",
-                                "`add` - add yourself to the current raid/trial",
-                                "`remove` - remove yourself from the current raid/trial",
+        event.msg.reply("All commands must be sent by mentioning me:\n**Events**\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n**Map**\n{}\n{}\n{}\n{}"
+                        .format("`new <time> <Event Title> ~ <Event Description>` - set a new event with a given time (eg, 10pm). Split event title and description with a ~ character!\n *(example: @DestinyBot event new 10pm Calus Raid! ~ We're gonna beat prestige calus!)*",
+                                "`edit <time>` - edit the current event with a new time",
+                                "`clear` - clear the currently set event",
+                                "`show` - show the current event, if any",
+                                "`add` - add yourself to the current event",
+                                "`remove` - remove yourself from the current event",
                                 "`map underbelly` - post the map of the leviathan underbelly",
                                 "`map underbelly3d` - post the 3D map of the leviathan underbelly",
                                 "`map doggos` - post the map of the Pleasure Gardens raid room",

@@ -2,7 +2,8 @@ token: 'DISCORD_API_KEY'
 
 bot:
   plugins:
-    - plugins.raid
-    - plugins.trials
+    #- plugins.raid
+    #- plugins.trials
     - plugins.help
     - plugins.map
+    - plugins.events
