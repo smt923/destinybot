@@ -1,7 +1,6 @@
 ﻿from threading import Thread
 import time
 from disco.bot import Plugin
-import discord
 import arrow
 import dateparser
 from disco.types.message import *
