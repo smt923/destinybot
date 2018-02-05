@@ -46,9 +46,12 @@ class RaidPlugin(Plugin):
 
         eventStr = changedContent[timeInfoEnd + 1:1000000]
         eventParts = ""
-        if '~' in eventStr:
+
+        if '|' in eventStr:
+            eventParts = eventStr.split('|')
+        elif '~' in eventStr:
             eventParts = eventStr.split('~')
-        if '-' in eventStr:
+        elif '-' in eventStr:
             eventParts = eventStr.split('-')
 
         eventTitle = eventParts[0]
