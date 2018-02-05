@@ -7,7 +7,6 @@ import dateparser
 from disco.types.message import *
 
 
-
 class RaidPlugin(Plugin):
     """Disco plugin holding all of the commands related to Destiny 2 raids"""
 
@@ -42,22 +41,15 @@ class RaidPlugin(Plugin):
                                                    'RETURN_AS_TIMEZONE_AWARE': True})
 
         savedContent = event.msg.content
-
         changedContent = savedContent.replace('<@378562216133394434> event new ', "")
-
         timeInfoEnd = changedContent.find(" ")
 
         eventStr = changedContent[timeInfoEnd + 1:1000000]
-
-        
-
         eventParts = eventStr.split('~')
-
         eventTitle = eventParts[0]
         eventDesc = eventParts[1]
 
         #print(eventStr)
-
         #print(eventParts[0] + eventParts[1])
 
         if not parsed:
