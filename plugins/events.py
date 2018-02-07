@@ -1,11 +1,9 @@
 ﻿from threading import Thread
 import time
 from disco.bot import Plugin
-import discord
 import arrow
 import dateparser
 from disco.types.message import *
-
 
 
 class RaidPlugin(Plugin):
@@ -23,10 +21,10 @@ class RaidPlugin(Plugin):
         if self.israidset:
             self.eventEmbed.fields[1].value = self.get_raiders_string(event)
             self.eventEmbed.fields[0].value = self.eventTime
-            #event.msg.reply("Current raid: {} ({})\nRaid members: {}"
-                            #.format(arrow.get(self.raidtime).humanize(),
-                                    #self.raidtime.strftime("%a, %I:%M %p %Z"),
-                                    #self.get_raiders_string(event)))
+            # event.msg.reply("Current raid: {} ({})\nRaid members: {}"
+            #.format(arrow.get(self.raidtime).humanize(),
+            #self.raidtime.strftime("%a, %I:%M %p %Z"),
+            # self.get_raiders_string(event)))
             event.msg.reply(embed=self.eventEmbed)
         else:
             event.msg.reply("No event set")
@@ -42,23 +40,22 @@ class RaidPlugin(Plugin):
                                                    'RETURN_AS_TIMEZONE_AWARE': True})
 
         savedContent = event.msg.content
-
-        changedContent = savedContent.replace('<@378562216133394434> event new ', "")
-
+        changedContent = savedContent.replace(
+            '<@378562216133394434> event new ', "")
         timeInfoEnd = changedContent.find(" ")
 
         eventStr = changedContent[timeInfoEnd + 1:1000000]
+        eventParts = ""
 
-        
-
-        eventParts = eventStr.split('~')
+        if '|' in eventStr:
+            eventParts = eventStr.split('|')
+        elif '~' in eventStr:
+            eventParts = eventStr.split('~')
+        elif '-' in eventStr:
+            eventParts = eventStr.split('-')
 
         eventTitle = eventParts[0]
         eventDesc = eventParts[1]
-
-        #print(eventStr)
-
-        #print(eventParts[0] + eventParts[1])
 
         if not parsed:
             event.msg.reply('Could not detect the time, please try again')
@@ -71,19 +68,23 @@ class RaidPlugin(Plugin):
         timer_15 = Thread(target=self.raidtimer_15, args=(event,))
         timer_now.start()
         timer_15.start()
-        
+
         #event.msg.reply('Event Created! {0}: '.format(eventTitle) + parsed.strftime("%A at %I:%M %p %Z"))
 
-        self.eventEmbed = MessageEmbed(title=eventTitle, description=eventDesc, color=3447003)
+        self.eventEmbed = MessageEmbed(
+            title=eventTitle, description=eventDesc, color=3447003)
 
         self.eventTime = parsed.strftime("%A at %I:%M %p %Z")
         self.eventTitle = eventTitle
 
-        self.eventEmbed.add_field(name="Time", value=self.eventTime, inline=False)
-        self.eventEmbed.add_field(name="Members", value=self.get_raiders_string(event), inline=False)#save all this stuff as a attribute of the plugin so we can access it in 'show' and other functions
+        self.eventEmbed.add_field(
+            name="Time", value=self.eventTime, inline=False)
+        # save all this stuff as a attribute of the plugin so we can access it in 'show' and other functions
+        self.eventEmbed.add_field(
+            name="Members", value=self.get_raiders_string(event), inline=False)
 
         #message = Message(embeds=list(embed))
-        
+
         event.msg.reply(embed=self.eventEmbed)
 
     @Plugin.command('edit', '<rtime:str...>', group='event')
@@ -144,8 +145,9 @@ class RaidPlugin(Plugin):
                 for members in self.raiders:
                     raidgroup += members.mention + ", "
                 #raidstartEmbed = MessageEmbed(title=self.eventEmbed.title + "starting now!", description=raidgroup.rstrip(', '))
-                event.msg.reply('{} starting now! '.format(self.eventEmbed.title.rstrip(' ')) + raidgroup.rstrip(', '))
-                #event.msg.reply(embed=raidstartEmbed)
+                event.msg.reply('{} starting now! '.format(
+                    self.eventEmbed.title.rstrip(' ')) + raidgroup.rstrip(', '))
+                # event.msg.reply(embed=raidstartEmbed)
                 self.raid_clear(event)
                 break
             time.sleep(10)
