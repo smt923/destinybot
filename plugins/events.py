@@ -4,6 +4,7 @@ from disco.bot import Plugin
 import arrow
 import dateparser
 from disco.types.message import *
+import random
 
 
 class RaidPlugin(Plugin):
@@ -23,7 +24,7 @@ class RaidPlugin(Plugin):
             self.eventEmbed.fields[0].value = self.eventTime
             # event.msg.reply("Current raid: {} ({})\nRaid members: {}"
             #.format(arrow.get(self.raidtime).humanize(),
-            #self.raidtime.strftime("%a, %I:%M %p %Z"),
+            # self.raidtime.strftime("%a, %I:%M %p %Z"),
             # self.get_raiders_string(event)))
             event.msg.reply(embed=self.eventEmbed)
         else:
@@ -32,6 +33,11 @@ class RaidPlugin(Plugin):
     @Plugin.command('new', '<rtime:str> <eventStr:str...>', group='event')
     def command_new(self, event, rtime, eventStr):
         """Set up a new raid, passing in time via argument to the bot"""
+        # some stuff to do before we start
+        guild = event.msg.guild
+        # we now have a list of every emoji in the server, use str() to convert to format you can send via message
+        self.guildEmojis = list(guild.emojis.values())
+        # print(self.guildEmojis)
         if self.israidset:
             event.msg.reply('There is already an event set!')
             return
@@ -69,7 +75,7 @@ class RaidPlugin(Plugin):
         timer_now.start()
         timer_15.start()
 
-        #event.msg.reply('Event Created! {0}: '.format(eventTitle) + parsed.strftime("%A at %I:%M %p %Z"))
+        # event.msg.reply('Event Created! {0}: '.format(eventTitle) + parsed.strftime("%A at %I:%M %p %Z"))
 
         self.eventEmbed = MessageEmbed(
             title=eventTitle, description=eventDesc, color=3447003)
@@ -83,7 +89,7 @@ class RaidPlugin(Plugin):
         self.eventEmbed.add_field(
             name="Members", value=self.get_raiders_string(event), inline=False)
 
-        #message = Message(embeds=list(embed))
+        # message = Message(embeds=list(embed))
 
         event.msg.reply(embed=self.eventEmbed)
 
@@ -144,7 +150,7 @@ class RaidPlugin(Plugin):
                 raidgroup = ""
                 for members in self.raiders:
                     raidgroup += members.mention + ", "
-                #raidstartEmbed = MessageEmbed(title=self.eventEmbed.title + "starting now!", description=raidgroup.rstrip(', '))
+                # raidstartEmbed = MessageEmbed(title=self.eventEmbed.title + "starting now!", description=raidgroup.rstrip(', '))
                 event.msg.reply('{} starting now! '.format(
                     self.eventEmbed.title.rstrip(' ')) + raidgroup.rstrip(', '))
                 # event.msg.reply(embed=raidstartEmbed)
@@ -187,8 +193,88 @@ class RaidPlugin(Plugin):
             raidmembers += "`{}` ".format(member.username)
         return raidmembers.rstrip(' ')
 
-    def get_random_teams(self, event):
+    # def get_random_teams(self, event):
+    #    pass
+
+    # def start_draft(self, event):
+    #    pass
+
+    @Plugin.command('random', '<team1:str> <team2:str>', group='draft')
+    def get_random_teams(self, event, team1, team2):
+
+        team_list = [team1, team2]
+        team_dict = {team1: [], team2: []}
+        player_list = self.raiders
+        print(player_list)
+        random.shuffle(player_list)
+
+        index = 0
+        for player in player_list:
+            is_odd = index % 2
+            if is_odd:
+                team_dict[team1].append(player.username)
+            else:
+                team_dict[team2].append(player.username)
+            index += 1
+
+        self.teamEmbed = MessageEmbed(
+            title="**Teams have been randomly assigned!**", description="", color=3447003)
+
+        team1Str = ""
+        team2Str = ""
+
+        team1PlayerStr = ""
+        team2PlayerStr = ""
+
+        teamStrings = [team1, team2]
+        for count in range(0, len(self.guildEmojis)):
+            if team1 in self.guildEmojis[count].name:
+                # + " **VS**" #make it so the emoji prepends the team name
+                team1Str = str(self.guildEmojis[count]) + " " + team1
+
+        if team1Str == "":
+            team1Str = team1
+
+        for count in range(0, len(self.guildEmojis)):
+            if team2 in self.guildEmojis[count].name:
+                # + " " +  #make it so the emoji is after the team name
+                team2Str = str(self.guildEmojis[count]) + " " + team2
+
+        if team2Str == "":
+            team2Str = team2
+
+        for each in team_dict[team1]:
+            team1PlayerStr = team1PlayerStr + "`" + each + "`" + " "
+
+        for each in team_dict[team2]:
+            team2PlayerStr = team2PlayerStr + "`" + each + "`" + " "
+
+        team1PlayerStr.rstrip(" ")
+        team2PlayerStr.rstrip(" ")
+
+        if not team1PlayerStr:
+            team1PlayerStr = "None"
+        if not team2PlayerStr:
+            team2PlayerStr = "None"
+
+        self.teamEmbed.add_field(
+            name=team1Str, value=team1PlayerStr, inline=False)
+        self.teamEmbed.add_field(
+            name="\u2063", value="__**VS**__", inline=False)
+        self.teamEmbed.add_field(name="\u2063", value="\u2063", inline=False)
+        self.teamEmbed.add_field(
+            name=team2Str, value=team2PlayerStr, inline=False)
+
+        event.msg.reply(embed=self.teamEmbed)
+
+    @Plugin.command('show', group='draft')
+    def show_draft(self, event):
+        temp_embed = self.teamEmbed
+        temp_embed.title = "Current Teams"
+
+        event.msg.reply(embed=temp_embed)
+
+    def start_cm_draft(self, event, teams, captains):
         pass
 
-    def start_draft(self, event):
-        pass
+    #{}[]().,:;+-*/%&|^~=<>#@\ for intellisense
