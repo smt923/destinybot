@@ -7,3 +7,5 @@ bot:
     - plugins.help
     - plugins.map
     - plugins.events
+    - plugins.misc
+
