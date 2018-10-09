@@ -3,7 +3,7 @@ import time
 from disco.bot import Plugin
 import arrow
 import dateparser
-from disco.types.message import *
+from disco.types.message import MessageEmbed
 import random
 
 
@@ -125,10 +125,15 @@ class RaidPlugin(Plugin):
     @Plugin.command('add', group='event')
     def command_add(self, event):
         """Adds the user to the raid group"""
+        if not self.israidset:
+            event.msg.reply('There is currently no event set, ' +
+                            event.msg.author.username + '!')
+            return
         if event.msg.author in self.raiders:
             event.msg.reply('You\'re already in the event, ' +
                             event.msg.author.username + '!')
             return
+        
         self.raiders.append(event.msg.author)
         event.msg.reply('You have joined the event, ' +
                         event.msg.author.username)
@@ -136,6 +141,10 @@ class RaidPlugin(Plugin):
     @Plugin.command('remove', group='event')
     def command_remove(self, event):
         """Removes the user from the raid group"""
+        if not self.israidset:
+            event.msg.reply('There is currently no event set, ' +
+                            event.msg.author.username + '!')
+            return
         self.raiders.remove(event.msg.author)
         event.msg.reply('You have been removed from the event, ' +
                         event.msg.author.username)
@@ -199,10 +208,9 @@ class RaidPlugin(Plugin):
     # def start_draft(self, event):
     #    pass
 
-    @Plugin.command('random', '<team1:str> <team2:str>', group='draft')
-    def get_random_teams(self, event, team1, team2):
-
-        team_list = [team1, team2]
+    @Plugin.command('random', '[team1:str] [team2:str]', group='draft')
+    def get_random_teams(self, event, team1="Team A", team2="Team B"):
+        """Randomly drafts players added to the event in to two teams"""
         team_dict = {team1: [], team2: []}
         player_list = self.raiders
         print(player_list)
@@ -226,7 +234,6 @@ class RaidPlugin(Plugin):
         team1PlayerStr = ""
         team2PlayerStr = ""
 
-        teamStrings = [team1, team2]
         for count in range(0, len(self.guildEmojis)):
             if team1 in self.guildEmojis[count].name:
                 # + " **VS**" #make it so the emoji prepends the team name
@@ -269,6 +276,15 @@ class RaidPlugin(Plugin):
 
     @Plugin.command('show', group='draft')
     def show_draft(self, event):
+        """Show the last created draft"""
+        temp_embed = self.teamEmbed
+        temp_embed.title = "Current Teams"
+
+        event.msg.reply(embed=temp_embed)
+
+    @Plugin.command('clear', group='draft')
+    def clear_draft(self, event):
+        """Clears the last created draft"""
         temp_embed = self.teamEmbed
         temp_embed.title = "Current Teams"
 
