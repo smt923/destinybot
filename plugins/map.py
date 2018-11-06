@@ -29,6 +29,11 @@ class MapPlugin(Plugin):
         """Posts a map of the prestige bathhouse callouts"""
         event.msg.reply('https://i.imgur.com/rh3jddo.png')
 
+    @Plugin.command('snakes', group='map')
+    def command_snakes(self, event):
+        """Posts an image of snake symbols in Forsaken"""
+        event.msg.reply('https://i.imgur.com/L7gjSzX.png')
+
     @Plugin.command('voidcall', group='map')
     def command_voidcall(self, event):
         """Posts a chart of the four call outs used during a raid"""

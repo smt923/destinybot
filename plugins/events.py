@@ -22,6 +22,7 @@ class RaidPlugin(Plugin):
         if self.israidset:
             self.eventEmbed.fields[1].value = self.get_raiders_string(event)
             self.eventEmbed.fields[0].value = self.eventTime
+            self.eventEmbed.set_footer(text="Total Members: {}".format(len(self.raiders)))
             # event.msg.reply("Current raid: {} ({})\nRaid members: {}"
             #.format(arrow.get(self.raidtime).humanize(),
             # self.raidtime.strftime("%a, %I:%M %p %Z"),
@@ -30,8 +31,8 @@ class RaidPlugin(Plugin):
         else:
             event.msg.reply("No event set")
 
-    @Plugin.command('new', '<rtime:str> <eventStr:str...>', group='event')
-    def command_new(self, event, rtime, eventStr):
+    @Plugin.command('new', '<rtime:str> <eventTitle:str...>', group='event')
+    def command_new(self, event, rtime, eventTitle):
         """Set up a new raid, passing in time via argument to the bot"""
         # some stuff to do before we start
         guild = event.msg.guild
@@ -45,23 +46,10 @@ class RaidPlugin(Plugin):
                                                    'TO_TIMEZONE': 'Europe/London',
                                                    'RETURN_AS_TIMEZONE_AWARE': True})
 
-        savedContent = event.msg.content
-        changedContent = savedContent.replace(
-            '<@378562216133394434> event new ', "")
-        timeInfoEnd = changedContent.find(" ")
+        if eventTitle is "":
+            eventTitle = "New Event"
 
-        eventStr = changedContent[timeInfoEnd + 1:1000000]
-        eventParts = ""
-
-        if '|' in eventStr:
-            eventParts = eventStr.split('|')
-        elif '~' in eventStr:
-            eventParts = eventStr.split('~')
-        elif '-' in eventStr:
-            eventParts = eventStr.split('-')
-
-        eventTitle = eventParts[0]
-        eventDesc = eventParts[1]
+        eventDesc = "`@Destinybot event add` to add up"
 
         if not parsed:
             event.msg.reply('Could not detect the time, please try again')
@@ -88,6 +76,7 @@ class RaidPlugin(Plugin):
         # save all this stuff as a attribute of the plugin so we can access it in 'show' and other functions
         self.eventEmbed.add_field(
             name="Members", value=self.get_raiders_string(event), inline=False)
+        self.eventEmbed.set_footer(text="Total Members: {}".format(len(self.raiders)))
 
         # message = Message(embeds=list(embed))
 
@@ -135,8 +124,8 @@ class RaidPlugin(Plugin):
             return
         
         self.raiders.append(event.msg.author)
-        event.msg.reply('You have joined the event, ' +
-                        event.msg.author.username)
+        event.msg.reply('You have joined the event, {}! ({} total)'
+                        .format(event.msg.author.username, len(self.raiders)))
 
     @Plugin.command('remove', group='event')
     def command_remove(self, event):
