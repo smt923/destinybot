@@ -3,6 +3,7 @@ import time
 from disco.bot import Plugin
 import arrow
 import dateparser
+from datetime import datetime, timedelta
 from disco.types.message import MessageEmbed
 import random
 
@@ -54,6 +55,11 @@ class RaidPlugin(Plugin):
         if not parsed:
             event.msg.reply('Could not detect the time, please try again')
             return
+        
+        timeNow = datetime.datetime.now()
+        if parsed < timeNow:
+            parsed = parsed + timedelta(days=1)
+
         self.raidtime = arrow.get(parsed)
 
         self.israidset = True
