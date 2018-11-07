@@ -3,7 +3,8 @@ import time
 from disco.bot import Plugin
 import arrow
 import dateparser
-from datetime import datetime, timedelta
+import pytz
+from datetime import datetime, timedelta, timezone
 from disco.types.message import MessageEmbed
 import random
 
@@ -56,7 +57,7 @@ class RaidPlugin(Plugin):
             event.msg.reply('Could not detect the time, please try again')
             return
         
-        timeNow = datetime.now()
+        timeNow = datetime.now(timezone.utc).astimezone(pytz.timezone('Europe/London'))
         if parsed < timeNow:
             parsed = parsed + timedelta(days=1)
 
