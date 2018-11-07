@@ -56,7 +56,7 @@ class RaidPlugin(Plugin):
             event.msg.reply('Could not detect the time, please try again')
             return
         
-        timeNow = datetime.datetime.now()
+        timeNow = datetime.now()
         if parsed < timeNow:
             parsed = parsed + timedelta(days=1)
 
