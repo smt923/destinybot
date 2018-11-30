@@ -101,14 +101,17 @@ class RaidPlugin(Plugin):
         if not parsed:
             event.msg.reply('Could not detect the time, please try again')
             return
-        diff = arrow.get(parsed) - arrow.now(tz='Europe/London')
+
+        self.raidtime = arrow.get(parsed)
+        self.eventTime = parsed.strftime("%A at %I:%M %p %Z")
+
         # if the 15 minute timer triggered, and there's more than 15 minutes left, restart it
+        diff = self.raidtime - arrow.now(tz='Europe/London')
         if self.timer15triggered and diff.seconds / 60 > 15:
             timer_15 = Thread(target=self.raidtimer_15, args=(event,))
             timer_15.start()
             self.timer15triggered = False
-        self.raidtime = arrow.get(parsed)
-        self.eventTime = parsed.strftime("%A at %I:%M %p %Z")
+
         event.msg.reply('Current event time changed to: ' +
                         parsed.strftime("%A at %I:%M %p %Z"))
 
@@ -156,7 +159,7 @@ class RaidPlugin(Plugin):
                 for members in self.raiders:
                     raidgroup += members.mention + ", "
                 # raidstartEmbed = MessageEmbed(title=self.eventEmbed.title + "starting now!", description=raidgroup.rstrip(', '))
-                event.msg.reply('{} starting now! '.format(
+                event.msg.reply('"{}" starting now! '.format(
                     self.eventEmbed.title.rstrip(' ')) + raidgroup.rstrip(', '))
                 # event.msg.reply(embed=raidstartEmbed)
                 self.raid_clear(event)
@@ -174,8 +177,8 @@ class RaidPlugin(Plugin):
                 raidgroup = ""
                 for members in self.raiders:
                     raidgroup += members.mention + ", "
-                event.msg.reply(
-                    'Event starting in 15 minutes! ' + raidgroup.rstrip(', '))
+                event.msg.reply('"{}" starting in 15 minutes! '.format(
+                    self.eventEmbed.title.rstrip(' ')) + raidgroup.rstrip(', '))
                 self.timer15triggered = True
                 break
             time.sleep(30)
