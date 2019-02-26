@@ -38,3 +38,8 @@ class MapPlugin(Plugin):
     def command_voidcall(self, event):
         """Posts a chart of the four call outs used during a raid"""
         event.msg.reply('https://i.imgur.com/vU9j5qj.jpg')
+
+    @Plugin.command('eyes', group='map')
+    def command_voidcall(self, event):
+        """Posts a chart of the eyes for Last Wish"""
+        event.msg.reply('https://i.imgur.com/cYdVSD3.png')
